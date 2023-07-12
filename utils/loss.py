@@ -1,6 +1,7 @@
 from sklearn.preprocessing import normalize
 import ot
 import numpy as np
+from PIL import Image
 
 
 def opt_transport_loss(png_cnt, cur_cnt):
@@ -19,3 +20,9 @@ def opt_transport_loss(png_cnt, cur_cnt):
     # Compute the transportation loss
     transportation_loss = np.sum(T * M)
     return transportation_loss
+
+
+def image_diff(png_first, png_second) -> float:
+    image_first = np.array(Image.open(png_first))
+    image_second = np.array(Image.open(png_second))
+    return float(abs(np.sum(image_second - image_first)))

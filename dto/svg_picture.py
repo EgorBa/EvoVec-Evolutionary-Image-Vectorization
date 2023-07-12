@@ -8,7 +8,7 @@ import os
 import config
 from dto.svg_path import SvgPath
 from utils.image import read_picture, get_contours
-from utils.loss import opt_transport_loss
+from utils.loss import opt_transport_loss, image_diff
 from PIL import Image
 
 
@@ -22,8 +22,9 @@ class SvgPicture:
     png_init_path: str
 
     def __init__(self, list_of_paths: List[SvgPath], png_init_path: str):
-        png_pic = read_picture(png_init_path)
-        self.png_cnt = get_contours(png_pic)
+        if config.FITNESS_TYPE == config.Fitness.OPT_TRANSPORT:
+            png_pic = read_picture(png_init_path)
+            self.png_cnt = get_contours(png_pic)
         self.paths = list_of_paths
         self.paths_count = len(self.paths)
         width, height = Image.open(png_init_path).size
@@ -51,10 +52,12 @@ class SvgPicture:
             svg_str = f.read()
             svg2png(svg_str, write_to=str(path_tmp_png))
 
-        cur_pic = read_picture(path_tmp_png)
-        cur_cnt = get_contours(cur_pic)
-
-        self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
+        if config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF:
+            self.fitness = image_diff(self.png_init_path, path_tmp_png)
+        elif config.FITNESS_TYPE == config.Fitness.OPT_TRANSPORT:
+            cur_pic = read_picture(path_tmp_png)
+            cur_cnt = get_contours(cur_pic)
+            self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
 
         if clear_after:
             os.remove(path_tmp_svg)

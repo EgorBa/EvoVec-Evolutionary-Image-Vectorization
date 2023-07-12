@@ -6,7 +6,13 @@ import numpy as np
 import config
 from dto.svg_path import SvgPath
 from dto.svg_picture import SvgPicture
+from utils.stat_creator import create_gif, create_graf
 from vectorize_by_algo import get_initial_svg
+
+
+def clear_tmp_dir():
+    for filename in os.listdir(config.TMP_FOLDER):
+        os.remove(os.path.join(config.TMP_FOLDER, filename))
 
 
 def init_first_generation() -> List[SvgPicture]:
@@ -23,7 +29,7 @@ def get_most_fittest(cur_population: List[SvgPicture], count: int) -> List[SvgPi
     for individual in cur_population:
         individual.culc_fitness_function()
     cur_population.sort(key=lambda x: x.fitness)
-    return cur_population[-count:]
+    return cur_population[:count]
 
 
 def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
@@ -44,16 +50,17 @@ def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
 # def crossover(cur_population: List[SvgPicture]) -> List[SvgPicture]:
 
 
-def mutation(cur_population: List[SvgPicture]) -> List[SvgPicture]:
+def mutation(cur_population: List[SvgPicture], gen_number: int) -> List[SvgPicture]:
     for individual in cur_population:
         if random.random() < 0.3:
             random_path = individual.paths[random.randint(0, len(individual.paths) - 1)]
             random_index = random.randint(0, len(random_path.path_arr) - 1)
             before = random_path.path_arr[random_index]
+            sign = 1
             if random.random() < 0.5:
-                random_path.path_arr[random_index] = (before + 0.1) % 1
-            else:
-                random_path.path_arr[random_index] = (before - 0.1) % 1
+                sign = -1
+            new_value = (before + sign * (0.1 - 0.001 * gen_number)) % 1
+            random_path.path_arr[random_index] = new_value
     if config.DEBUG:
         print(f'mutation applied, size = {len(cur_population)}')
     return cur_population
@@ -62,19 +69,28 @@ def mutation(cur_population: List[SvgPicture]) -> List[SvgPicture]:
 def main():
     generation = init_first_generation()
 
-    for i in range(500):
+    clear_tmp_dir()
+    best_fitness_value = []
+
+    for i in range(config.STEP_EVOL):
         if config.DEBUG:
             print(f'generation : {i}, size = {len(generation)}')
         elite = get_most_fittest(generation, int(config.ELITE_PERCENT * config.INDIVIDUAL_COUNT))
         children = create_children(elite)
-        new_generation = elite + children
-        mutated_generation = mutation(new_generation)
-        generation = get_most_fittest(mutated_generation, config.INDIVIDUAL_COUNT)
+        mutated_generation = mutation(children, i)
+        new_generation = elite + mutated_generation
+        generation = get_most_fittest(new_generation, config.INDIVIDUAL_COUNT)
         if config.DEBUG:
-            best = generation[-1]
-            best.save_as_svg(os.path.join("tmp", f'gen_{i}.svg'))
+            best = generation[0]
+            path_svg = os.path.join(config.TMP_FOLDER, f'gen_{i}.svg')
+            best.save_as_svg(path_svg)
+            best_fitness_value.append((i, best.fitness))
             print(f'fitness of best individual = {best.fitness}')
-            print(best.fitness)
+            print("===============================")
+
+    if config.DEBUG:
+        create_gif(os.path.join(config.TMP_FOLDER, f'gif_animation.gif'))
+        create_graf(best_fitness_value, os.path.join(config.TMP_FOLDER,'graf_of_fitness.png'))
 
 
 if __name__ == "__main__":
