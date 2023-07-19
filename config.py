@@ -14,7 +14,7 @@ TMP_FOLDER = "tmp"
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("data", "AgapeDesign.png")
+PNG_PATH = os.path.join("data", "adidas.png")
 
 # count individuals in generation
 INDIVIDUAL_COUNT = 10

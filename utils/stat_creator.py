@@ -1,3 +1,4 @@
+import math
 import os.path
 
 from PIL import Image
@@ -10,8 +11,12 @@ import config
 
 def create_gif(gif_name):
     frames = []
+    step = math.ceil(config.STEP_EVOL / 1000)
 
-    for frame_number in range(0, config.STEP_EVOL):
+    for i in range(0, config.STEP_EVOL):
+        frame_number = i * step
+        if frame_number >= config.STEP_EVOL:
+            break
         path_tmp_svg = os.path.join(config.TMP_FOLDER, f'gen_{frame_number}.svg')
         path_tmp_png = os.path.join(config.TMP_FOLDER, f'gen_{frame_number}.png')
         with open(path_tmp_svg, 'r') as f:
