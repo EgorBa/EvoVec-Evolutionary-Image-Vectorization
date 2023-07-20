@@ -54,18 +54,9 @@ def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
 
 
 def mutation(cur_population: List[SvgPicture], gen_number: int) -> List[SvgPicture]:
-    for individual in cur_population:
-        if random.random() < 0.3:
-            assert len(individual.paths) != 0
-            random_path = individual.paths[random.randint(0, len(individual.paths) - 1)]
-            random_segment = random_path.path_arr[random.randint(0, len(random_path.path_arr) - 1)]
-            random_index = random.randint(0, random_segment.coordinates_count() - 1)
-            before = random_segment.get_value_by_index(random_index)
-            sign = 1
-            if random.random() < 0.5:
-                sign = -1
-            new_value = (before + sign * (0.1 - 0.00005 * gen_number)) % 1
-            random_segment.set_value_by_index(random_index, new_value)
+    for cur_mutation in config.MUTATION_TYPE:
+        for individual in cur_population:
+            cur_mutation.mutate(individual, gen_number)
     if config.DEBUG:
         print(f'mutation applied, size = {len(cur_population)}')
     return cur_population
@@ -95,7 +86,7 @@ def main():
 
     if config.DEBUG:
         create_gif(os.path.join(config.TMP_FOLDER, f'gif_animation.gif'))
-        create_graf(best_fitness_value, os.path.join(config.TMP_FOLDER,'graf_of_fitness.png'))
+        create_graf(best_fitness_value, os.path.join(config.TMP_FOLDER, 'graf_of_fitness.png'))
 
 
 if __name__ == "__main__":
