@@ -1,6 +1,7 @@
 import os
 from enum import Enum
 
+from crossover.random_path import RandomPath
 from mutations.drop_path import DropPath
 from mutations.drop_segment import DropSegment
 from mutations.needle import Needle
@@ -26,11 +27,14 @@ INDIVIDUAL_COUNT = 10
 # percent of elite
 ELITE_PERCENT = 0.2
 
-# ster of evol
-STEP_EVOL = 200
+# step of evol
+STEP_EVOL = 1000
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF
 
 # mutations
-MUTATION_TYPE = [Needle(0.3), DropSegment(0.1), DropPath(0.05)]
+MUTATION_TYPE = [Needle(0.3), DropSegment(0.05), DropPath(0.005)]
+
+# crossovers
+CROSSOVER = []

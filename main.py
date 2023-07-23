@@ -2,6 +2,7 @@ import os
 from typing import List
 import random
 import numpy as np
+import time
 
 import config
 from dto.svg_path import SvgPath
@@ -50,7 +51,11 @@ def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
     return children
 
 
-# def crossover(cur_population: List[SvgPicture]) -> List[SvgPicture]:
+def crossover(cur_population: List[SvgPicture]) -> List[SvgPicture]:
+    new_population = cur_population
+    for cur_crossover in config.CROSSOVER:
+        new_population = cur_crossover.crossover(new_population)
+    return new_population
 
 
 def mutation(cur_population: List[SvgPicture], gen_number: int) -> List[SvgPicture]:
@@ -67,21 +72,25 @@ def main():
 
     clear_tmp_dir()
     best_fitness_value = []
+    start_time = 0
 
     for i in range(config.STEP_EVOL):
         if config.DEBUG:
             print(f'generation : {i}, size = {len(generation)}')
+            start_time = time.time()
         elite = get_most_fittest(generation, int(config.ELITE_PERCENT * config.INDIVIDUAL_COUNT))
         children = create_children(elite)
         mutated_generation = mutation(children, i)
-        new_generation = elite + mutated_generation
+        crossover_generation = crossover(mutated_generation)
+        new_generation = elite + crossover_generation
         generation = get_most_fittest(new_generation, config.INDIVIDUAL_COUNT)
         if config.DEBUG:
             best = generation[0]
             path_svg = os.path.join(config.TMP_FOLDER, f'gen_{i}.svg')
             best.save_as_svg(path_svg)
             best_fitness_value.append((i, best.fitness))
-            print(f'fitness of best individual = {best.fitness}')
+            print(f'fitness of best individual = {best.fitness}, '
+                  f'time for gen = {round(time.time() - start_time, 3)} sec.')
             print("===============================")
 
     if config.DEBUG:

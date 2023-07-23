@@ -9,6 +9,9 @@ class Needle(Mutation):
     def __init__(self, probability):
         super(Needle, self).__init__(probability)
 
+    def __str__(self):
+        return f'{__class__.__name__} (probability = {self.probability})'
+
     def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         random_path = picture.paths[random.randint(0, len(picture.paths) - 1)]
         random_segment = random_path.path_arr[random.randint(0, len(random_path.path_arr) - 1)]

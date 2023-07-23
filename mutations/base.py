@@ -11,6 +11,9 @@ class Mutation:
         assert 0 <= probability <= 1
         self.probability = probability
 
+    def __str__(self):
+        return __class__.__name__
+
     def mutate(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         if len(picture.paths) == 0:
             if config.DEBUG:

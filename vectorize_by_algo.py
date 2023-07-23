@@ -74,7 +74,7 @@ def get_initial_svg(png_file_path) -> SvgPicture:
     svg_pic = preprocess_svg_paths(svg_path, png_path, w, h)
     os.remove(svg_path)
     if config.DEBUG:
-        print('Algo vectorization time =', abs(time.time() - start_time), 'sec', ', paths count =', len(svg_pic.paths))
+        print('Algo vectorization time =', round(abs(time.time() - start_time), 3), 'sec', ', paths count =', len(svg_pic.paths))
     return svg_pic
 
 
