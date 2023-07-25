@@ -7,7 +7,8 @@ import time
 import config
 from dto.svg_path import SvgPath
 from dto.svg_picture import SvgPicture
-from utils.stat_creator import create_gif, create_graf
+from utils.html_creator import HTMLFile
+from utils.stat_creator import create_gif, create_graf, get_gen_file_paths_by_numbers
 from vectorize_by_algo import get_initial_svg
 
 
@@ -72,6 +73,7 @@ def main():
 
     clear_tmp_dir()
     best_fitness_value = []
+    times = []
     start_time = 0
 
     for i in range(config.STEP_EVOL):
@@ -89,13 +91,20 @@ def main():
             path_svg = os.path.join(config.TMP_FOLDER, f'gen_{i}.svg')
             best.save_as_svg(path_svg)
             best_fitness_value.append((i, best.fitness))
+            t = round(time.time() - start_time, 3)
             print(f'fitness of best individual = {best.fitness}, '
-                  f'time for gen = {round(time.time() - start_time, 3)} sec.')
+                  f'time for gen = {t} sec.')
             print("===============================")
+            times.append(t)
 
     if config.DEBUG:
         create_gif(os.path.join(config.TMP_FOLDER, f'gif_animation.gif'))
-        create_graf(best_fitness_value, os.path.join(config.TMP_FOLDER, 'graf_of_fitness.png'))
+        path_to_graf = os.path.join(config.TMP_FOLDER, 'graf_of_fitness.png')
+        create_graf(best_fitness_value, path_to_graf)
+        gen_numbers = [0, int(config.STEP_EVOL / 4), int(config.STEP_EVOL / 2), int(3 * config.STEP_EVOL / 4),
+                       config.STEP_EVOL - 1]
+        HTMLFile(path_to_graf, times, get_gen_file_paths_by_numbers(gen_numbers), gen_numbers,
+                 os.path.join(config.TMP_FOLDER, 'results.pdf')).save_as_pdf()
 
 
 if __name__ == "__main__":

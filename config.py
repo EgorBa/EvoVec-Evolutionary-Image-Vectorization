@@ -28,7 +28,7 @@ INDIVIDUAL_COUNT = 10
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 1000
+STEP_EVOL = 500
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF

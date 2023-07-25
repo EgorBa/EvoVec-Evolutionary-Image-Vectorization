@@ -48,3 +48,15 @@ def create_graf(data, graf_name):
     plt.xlabel("population number", fontsize=14)
     plt.ylabel("fitness function", fontsize=14)
     plt.savefig(graf_name)
+
+
+def get_gen_file_paths_by_numbers(numbers):
+    ans_paths = []
+    for n in numbers:
+        path_tmp_svg = os.path.join(config.TMP_FOLDER, f'gen_{n}.svg')
+        path_tmp_png = os.path.join(config.TMP_FOLDER, f'gen_{n}.png')
+        with open(path_tmp_svg, 'r') as f:
+            svg_str = f.read()
+            svg2png(svg_str, write_to=str(path_tmp_png))
+        ans_paths.append(path_tmp_png)
+    return ans_paths
