@@ -19,7 +19,7 @@ TMP_FOLDER = "tmp"
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("data", "AgapeDesign.png")
+PNG_PATH = os.path.join("full_svg_dataset", "scene12.png")
 
 # count individuals in generation
 INDIVIDUAL_COUNT = 10
@@ -28,13 +28,13 @@ INDIVIDUAL_COUNT = 10
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 500
+STEP_EVOL = 100
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF
 
 # mutations
-MUTATION_TYPE = [Needle(0.3), DropSegment(0.05), DropPath(0.005)]
+MUTATION_TYPE = [Needle(0.3), DropPath(0.005)]
 
 # crossovers
 CROSSOVER = []

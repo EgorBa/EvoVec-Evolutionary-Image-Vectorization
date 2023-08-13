@@ -23,6 +23,6 @@ def opt_transport_loss(png_cnt, cur_cnt):
 
 
 def image_diff(png_first, png_second) -> float:
-    image_first = np.array(Image.open(png_first))
-    image_second = np.array(Image.open(png_second))
+    image_first = np.array(Image.open(png_first).convert('RGBA'))
+    image_second = np.array(Image.open(png_second).convert('RGBA'))
     return float(abs(np.sum(image_second - image_first)))

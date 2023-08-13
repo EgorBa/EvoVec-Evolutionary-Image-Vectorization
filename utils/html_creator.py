@@ -67,6 +67,8 @@ class HTMLFile:
         begin_table = '\t\t<table>\n\t\t\t<caption>Some results of evaluation</caption>\n\t\t\t<tr>\n'
         first_line = ''
         second_line = ''
+        first_line += f'\t\t\t\t<th><img src=\"data:image/png;base64,{self.image_file_path_to_base64_string(config.PNG_PATH)}\" alt=\"Source file\" width=\"200px\"></th>\n'
+        second_line += f'\t\t\t\t<th>Source Image</th>\n'
         for idx, gen in zip(gen_index, gen_files):
             first_line += f'\t\t\t\t<th><img src=\"data:image/png;base64,{self.image_file_path_to_base64_string(gen)}\" alt=\"Gen {idx}\" width=\"200px\"></th>\n'
             second_line += f'\t\t\t\t<th>Generation : {idx}</th>\n'
