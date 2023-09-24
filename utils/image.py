@@ -3,6 +3,9 @@ from PIL import Image
 import cv2
 import typing
 
+from dto.svg_path import SvgPath
+from dto.svg_segment import M, C
+
 
 def read_picture(path: str) -> np.array:
     image = Image.open(path)
@@ -24,3 +27,26 @@ def get_contours(pic: np.array) -> typing.Sequence[cv2.UMat]:
     # cv2.CHAIN_APPROX_NONE - контур хранится в виде точек
     cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     return cnts
+
+
+# Получение площади прямоугольной области в которой расположен путь
+def get_area(path: SvgPath, width: int, height: int) -> int:
+    max_x = 0
+    min_x = width
+    max_y = 0
+    min_y = height
+    for segment in path.path_arr:
+        x = 0
+        y = 0
+        if isinstance(segment, M):
+            x = segment.x * width
+            y = segment.y * height
+        elif isinstance(segment, C):
+            x = segment.x2 * width
+            y = segment.y2 * height
+        max_x = max(max_x, x)
+        min_x = min(min_x, x)
+        max_y = max(max_y, y)
+        min_y = min(min_y, y)
+    area = (max_y - min_y) * (max_x - min_x)
+    return area

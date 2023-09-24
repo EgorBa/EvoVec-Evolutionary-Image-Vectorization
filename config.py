@@ -1,7 +1,6 @@
 import os
 from enum import Enum
 
-from crossover.random_path import RandomPath
 from mutations.drop_path import DropPath
 from mutations.drop_segment import DropSegment
 from mutations.needle import Needle
@@ -10,6 +9,7 @@ from mutations.needle import Needle
 class Fitness(Enum):
     OPT_TRANSPORT = 1
     IMAGE_DIFF = 2
+    IMAGE_DIFF_EXP = 3
 
 
 # folder for tmp pictures
@@ -19,7 +19,7 @@ TMP_FOLDER = "tmp"
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("full_svg_dataset", "scene12.png")
+PNG_PATH = os.path.join("data", "hippo.png")
 
 # count individuals in generation
 INDIVIDUAL_COUNT = 10
@@ -28,13 +28,14 @@ INDIVIDUAL_COUNT = 10
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 100
+STEP_EVOL = 10
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF
 
 # mutations
-MUTATION_TYPE = [Needle(0.3), DropPath(0.005)]
+# MUTATION_TYPE = [Needle(0.3), DropPath(0.005)]
+MUTATION_TYPE = [DropPath(0.5, 0.001)]
 
 # crossovers
 CROSSOVER = []

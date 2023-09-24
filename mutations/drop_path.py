@@ -2,18 +2,23 @@ import random
 
 from dto.svg_picture import SvgPicture
 from mutations.base import Mutation
+from utils.image import get_area
 
 
 class DropPath(Mutation):
+    max_drop_area_percent: float
 
-    def __init__(self, probability):
+    def __init__(self, probability, max_drop_area_percent=1):
         super(DropPath, self).__init__(probability)
+        self.max_drop_area_percent = max_drop_area_percent
 
     def __str__(self):
-        return f'{__class__.__name__} (probability = {self.probability})'
+        return f'{__class__.__name__} (probability = {self.probability}, max_drop_area_percent = {self.max_drop_area_percent})'
 
     def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         random_path_index = random.randint(0, len(picture.paths) - 1)
-        if len(picture.paths) > 1:
+        random_path_area = get_area(picture.paths[random_path_index], picture.width, picture.height)
+        has_suitable_size_for_drop = random_path_area / (picture.width * picture.height) <= self.max_drop_area_percent
+        if len(picture.paths) > 1 and has_suitable_size_for_drop:
             del picture.paths[random_path_index]
         return picture

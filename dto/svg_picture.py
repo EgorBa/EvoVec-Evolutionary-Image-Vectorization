@@ -8,7 +8,7 @@ import os
 import config
 from dto.svg_path import SvgPath
 from utils.image import read_picture, get_contours
-from utils.loss import opt_transport_loss, image_diff
+from utils.loss import opt_transport_loss, image_diff, image_diff_exp
 from PIL import Image
 
 
@@ -58,6 +58,8 @@ class SvgPicture:
             cur_pic = read_picture(path_tmp_png)
             cur_cnt = get_contours(cur_pic)
             self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
+        elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_EXP:
+            self.fitness = image_diff_exp(self.png_init_path, path_tmp_png)
 
         if clear_after:
             os.remove(path_tmp_svg)
