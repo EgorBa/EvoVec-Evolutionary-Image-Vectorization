@@ -1,6 +1,7 @@
 import os
 from enum import Enum
 
+from mutations.concat_path import ConcatPath
 from mutations.drop_path import DropPath
 from mutations.drop_segment import DropSegment
 from mutations.needle import Needle
@@ -28,14 +29,14 @@ INDIVIDUAL_COUNT = 10
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 10
+STEP_EVOL = 30
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF
 
 # mutations
 # MUTATION_TYPE = [Needle(0.3), DropPath(0.005)]
-MUTATION_TYPE = [DropPath(0.5, 0.001)]
+MUTATION_TYPE = [ConcatPath(1)]
 
 # crossovers
 CROSSOVER = []

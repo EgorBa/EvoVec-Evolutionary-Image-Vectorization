@@ -17,7 +17,7 @@ class DropPath(Mutation):
 
     def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         random_path_index = random.randint(0, len(picture.paths) - 1)
-        random_path_area = get_area(picture.paths[random_path_index], picture.width, picture.height)
+        random_path_area = get_area(picture.paths[random_path_index], picture.width, picture.height).get_area()
         has_suitable_size_for_drop = random_path_area / (picture.width * picture.height) <= self.max_drop_area_percent
         if len(picture.paths) > 1 and has_suitable_size_for_drop:
             del picture.paths[random_path_index]

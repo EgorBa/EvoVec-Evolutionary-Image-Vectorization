@@ -3,6 +3,7 @@ from PIL import Image
 import cv2
 import typing
 
+from dto.area import Area
 from dto.svg_path import SvgPath
 from dto.svg_segment import M, C
 
@@ -30,7 +31,7 @@ def get_contours(pic: np.array) -> typing.Sequence[cv2.UMat]:
 
 
 # Получение площади прямоугольной области в которой расположен путь
-def get_area(path: SvgPath, width: int, height: int) -> int:
+def get_area(path: SvgPath, width: int, height: int) -> Area:
     max_x = 0
     min_x = width
     max_y = 0
@@ -48,5 +49,5 @@ def get_area(path: SvgPath, width: int, height: int) -> int:
         min_x = min(min_x, x)
         max_y = max(max_y, y)
         min_y = min(min_y, y)
-    area = (max_y - min_y) * (max_x - min_x)
+    area = Area(min_x, min_y, max_x, max_y)
     return area

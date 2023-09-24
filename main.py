@@ -3,6 +3,7 @@ from typing import List
 import random
 import numpy as np
 import time
+import threading
 
 import config
 from dto.svg_path import SvgPath
@@ -61,8 +62,13 @@ def crossover(cur_population: List[SvgPicture]) -> List[SvgPicture]:
 
 def mutation(cur_population: List[SvgPicture], gen_number: int) -> List[SvgPicture]:
     for cur_mutation in config.MUTATION_TYPE:
+        threads = []
         for individual in cur_population:
-            cur_mutation.mutate(individual, gen_number)
+            t = threading.Thread(target=cur_mutation.mutate, args=(individual, gen_number,))
+            t.start()
+            threads.append(t)
+        for t in threads:
+            t.join()
     if config.DEBUG:
         print(f'mutation applied, size = {len(cur_population)}')
     return cur_population

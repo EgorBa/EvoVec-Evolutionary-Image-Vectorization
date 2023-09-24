@@ -1,4 +1,6 @@
 from pathlib import Path
+
+import numpy as np
 from svgtrace import trace
 import os
 from svgpathtools import svg2paths, Line, QuadraticBezier
@@ -23,6 +25,12 @@ def complex_to_pair(n):
         else:
             return float(data[0]), 0
     return float(data[0][1:]), float(data[1][:-2])
+
+
+def get_color(color) -> np.array:
+    c = str(color).split(",")
+    color_array = np.array([int(c[0][4:]), int(c[1]), int(c[2][:-1])])
+    return color_array
 
 
 def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPicture:
@@ -61,7 +69,7 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
                 last_coord = p3, p4
             else:
                 print(f'unkhown curve = {curve}')
-        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, color=attr['fill']))
+        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, color=get_color(attr['fill'])))
     return SvgPicture(new_paths, png_file_path)
 
 
@@ -74,9 +82,9 @@ def get_initial_svg(png_file_path) -> SvgPicture:
     svg_pic = preprocess_svg_paths(svg_path, png_path, w, h)
     os.remove(svg_path)
     if config.DEBUG:
-        print('Algo vectorization time =', round(abs(time.time() - start_time), 3), 'sec', ', paths count =', len(svg_pic.paths))
+        print('Algo vectorization time =', round(abs(time.time() - start_time), 3), 'sec', ', paths count =',
+              len(svg_pic.paths))
     return svg_pic
-
 
 # For test
 # get_initial_svg(os.path.join("data", "img_3.png")).save_as_svg("lolkek.svg")
