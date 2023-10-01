@@ -45,7 +45,7 @@ def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
             path_arr = []
             for segment in path.path_arr:
                 path_arr.append(segment.__copy__())
-            paths.append(SvgPath(path.width, path.height, path_arr, np.array(path.color)))
+            paths.append(SvgPath(path.width, path.height, path_arr, np.array(path.color), path.gradient_color))
         child = SvgPicture(paths, config.PNG_PATH)
         children.append(child)
     if config.DEBUG:

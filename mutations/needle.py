@@ -1,16 +1,19 @@
-import config
 from dto.svg_picture import SvgPicture
 from mutations.base import Mutation
 import random
 
+from mutations.needle_type.base import Type
+
 
 class Needle(Mutation):
+    type: Type
 
-    def __init__(self, probability):
+    def __init__(self, probability: float, needle_type: Type):
         super(Needle, self).__init__(probability)
+        self.type = needle_type
 
     def __str__(self):
-        return f'{__class__.__name__} (probability = {self.probability})'
+        return f'{__class__.__name__} (probability = {self.probability}, type = {self.type})'
 
     def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         random_path = picture.paths[random.randint(0, len(picture.paths) - 1)]
@@ -20,6 +23,6 @@ class Needle(Mutation):
         sign = 1
         if random.random() < 0.5:
             sign = -1
-        new_value = (random_coordinate + sign * (0.1 - (0.1 / config.STEP_EVOL) * gen_number)) % 1
+        new_value = (random_coordinate + sign * self.type.get_ration(gen_number)) % 1
         random_segment.set_value_by_index(random_index, new_value)
         return picture

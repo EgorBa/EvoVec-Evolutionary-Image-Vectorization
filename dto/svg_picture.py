@@ -44,6 +44,11 @@ class SvgPicture:
             picture.append(path.create_drawing_object())
         picture.save_svg(filepath_svg)
 
+    def del_path(self, path: SvgPath):
+        if len(self.paths) > 1:
+            del path
+            self.paths_count = len(self.paths)
+
     def culc_fitness_function(self, clear_after=True):
         path_tmp_svg = os.path.join(config.TMP_FOLDER, f'tmp.svg')
         path_tmp_png = os.path.join(config.TMP_FOLDER, f'tmp.png')

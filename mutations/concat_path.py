@@ -7,10 +7,11 @@ from utils.image import get_area
 
 
 class ConcatPath(Mutation):
-    diff_color: int = 256 + 256 + 256
+    diff_color: int
 
-    def __init__(self, probability):
+    def __init__(self, probability, diff_color: int = 256 + 256 + 256):
         super(ConcatPath, self).__init__(probability)
+        self.diff_color = diff_color
 
     def __str__(self):
         return f'{__class__.__name__} (probability = {self.probability}, diff_color = {self.diff_color})'
@@ -29,5 +30,5 @@ class ConcatPath(Mutation):
             path1.set_path_arr(new_path)
             area = get_area(path1, picture.width, picture.height)
             path1.set_gradient_color(path1.color, path2.color, area)
-            del path2
+            picture.del_path(path2)
         return picture
