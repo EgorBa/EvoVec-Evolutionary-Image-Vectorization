@@ -46,7 +46,6 @@ class SvgPicture:
 
     def del_path(self, index_path: int):
         if len(self.paths) > 1:
-            print("kek")
             self.paths.pop(index_path)
             self.paths_count = len(self.paths)
 

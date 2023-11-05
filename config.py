@@ -38,7 +38,7 @@ FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
 # MUTATION_TYPE = [Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
-MUTATION_TYPE = [ConcatPath(1, 20), Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
+MUTATION_TYPE = [ConcatPath(1.0), Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
 
 # crossovers
 CROSSOVER = []
