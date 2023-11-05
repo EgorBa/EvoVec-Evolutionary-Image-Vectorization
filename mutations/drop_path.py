@@ -20,5 +20,5 @@ class DropPath(Mutation):
         random_path_area = get_area(picture.paths[random_path_index], picture.width, picture.height).get_area()
         has_suitable_size_for_drop = random_path_area / (picture.width * picture.height) <= self.max_drop_area_percent
         if has_suitable_size_for_drop:
-            picture.del_path(picture.paths[random_path_index])
+            picture.del_path(random_path_index)
         return picture

@@ -30,5 +30,5 @@ class ConcatPath(Mutation):
             path1.set_path_arr(new_path)
             area = get_area(path1, picture.width, picture.height)
             path1.set_gradient_color(path1.color, path2.color, area)
-            picture.del_path(path2)
+            picture.del_path(random_path_index2)
         return picture

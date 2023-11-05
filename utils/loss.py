@@ -32,3 +32,8 @@ def image_diff_exp(png_first, png_second) -> float:
     image_first = np.array(Image.open(png_first).convert('RGBA'))
     image_second = np.array(Image.open(png_second).convert('RGBA'))
     return float(np.sum(np.exp((abs(image_second - image_first) / 255) * 50 + 1)))
+
+def image_diff_mse(png_first, png_second) -> float:
+    image_first = np.array(Image.open(png_first).convert('RGBA'))
+    image_second = np.array(Image.open(png_second).convert('RGBA'))
+    return float(np.sum(np.power((abs(image_second - image_first) / 255), 2)))

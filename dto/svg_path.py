@@ -37,7 +37,7 @@ class SvgPath:
         y = int((area.y1 - area.y0) / 2)
         self.gradient_color = draw.LinearGradient(area.x0, y, area.x1, y)
         self.gradient_color.add_stop(0, self.to_color(color1), 1)
-        self.gradient_color.add_stop(1, self.to_color(color2), 0)
+        self.gradient_color.add_stop(1, self.to_color(color2), 1)
 
     @staticmethod
     def to_color(color: np.array) -> str:

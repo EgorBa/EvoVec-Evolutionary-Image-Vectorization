@@ -8,7 +8,7 @@ import os
 import config
 from dto.svg_path import SvgPath
 from utils.image import read_picture, get_contours
-from utils.loss import opt_transport_loss, image_diff, image_diff_exp
+from utils.loss import opt_transport_loss, image_diff, image_diff_exp, image_diff_mse
 from PIL import Image
 
 
@@ -44,9 +44,10 @@ class SvgPicture:
             picture.append(path.create_drawing_object())
         picture.save_svg(filepath_svg)
 
-    def del_path(self, path: SvgPath):
+    def del_path(self, index_path: int):
         if len(self.paths) > 1:
-            del path
+            print("kek")
+            self.paths.pop(index_path)
             self.paths_count = len(self.paths)
 
     def culc_fitness_function(self, clear_after=True):
@@ -65,6 +66,8 @@ class SvgPicture:
             self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
         elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_EXP:
             self.fitness = image_diff_exp(self.png_init_path, path_tmp_png)
+        elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_MSE:
+            self.fitness = image_diff_mse(self.png_init_path, path_tmp_png)
 
         if clear_after:
             os.remove(path_tmp_svg)

@@ -12,6 +12,7 @@ class Fitness(Enum):
     OPT_TRANSPORT = 1
     IMAGE_DIFF = 2
     IMAGE_DIFF_EXP = 3
+    IMAGE_DIFF_MSE = 4
 
 
 # folder for tmp pictures
@@ -21,19 +22,19 @@ TMP_FOLDER = "tmp"
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("data", "hippo.png")
+PNG_PATH = os.path.join("full_svg_dataset", "scene12.png")
 
 # count individuals in generation
-INDIVIDUAL_COUNT = 20
+INDIVIDUAL_COUNT = 30
 
 # percent of elite
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 100
+STEP_EVOL = 200
 
 # fitness type
-FITNESS_TYPE = Fitness.IMAGE_DIFF
+FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
 # MUTATION_TYPE = [Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
