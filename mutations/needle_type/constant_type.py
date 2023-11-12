@@ -6,7 +6,6 @@ class ConstantType(Type):
 
     def __init__(self, ratio):
         super().__init__()
-        assert 0 <= ratio <= 1
         self.ratio = ratio
 
     def __str__(self):

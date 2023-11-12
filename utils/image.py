@@ -1,11 +1,10 @@
 import numpy as np
 from PIL import Image
 import cv2
-import typing
+from typing import List, Sequence
 
 from dto.area import Area
-from dto.svg_path import SvgPath
-from dto.svg_segment import M, C
+from dto.svg_segment import M, C, Segment
 
 
 def read_picture(path: str) -> np.array:
@@ -18,7 +17,7 @@ def read_picture(path: str) -> np.array:
     return np.array(new_image)
 
 
-def get_contours(pic: np.array) -> typing.Sequence[cv2.UMat]:
+def get_contours(pic: np.array) -> Sequence[cv2.UMat]:
     pic = pic[:, :, ::-1]
     gray = cv2.cvtColor(pic, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -31,20 +30,20 @@ def get_contours(pic: np.array) -> typing.Sequence[cv2.UMat]:
 
 
 # Получение площади прямоугольной области в которой расположен путь
-def get_area(path: SvgPath, width: int, height: int) -> Area:
+def get_area(path_arr: List[Segment], width: int, height: int) -> Area:
     max_x = 0
     min_x = width
     max_y = 0
     min_y = height
-    for segment in path.path_arr:
+    for segment in path_arr:
         x = 0
         y = 0
         if isinstance(segment, M):
-            x = segment.x * width
-            y = segment.y * height
+            x = segment.x
+            y = segment.y
         elif isinstance(segment, C):
-            x = segment.x2 * width
-            y = segment.y2 * height
+            x = segment.x2
+            y = segment.y2
         max_x = max(max_x, x)
         min_x = min(min_x, x)
         max_y = max(max_y, y)

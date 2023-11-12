@@ -21,10 +21,10 @@ def complex_to_pair(n):
         data = str(n).split('-')
     if len(data) == 1:
         if data[0].__contains__("j"):
-            return 0, float(data[0][:-1])
+            return 0, round(float(data[0][:-1]), 1)
         else:
-            return float(data[0]), 0
-    return float(data[0][1:]), float(data[1][:-2])
+            return round(float(data[0]), 1), 0
+    return round(float(data[0][1:]), 1), round(float(data[1][:-2]), 1)
 
 
 def get_color(color) -> np.array:
@@ -47,15 +47,15 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
             if is_first:
                 is_first = False
                 p1, p2 = complex_to_pair(curve.start)
-                new_curve.append(M(p1 / w, p2 / h))
+                new_curve.append(M(p1, p2))
             if isinstance(curve, Line):
                 p1, p2 = complex_to_pair(curve.start)
                 p3, p4 = complex_to_pair(curve.end)
 
                 if last_coord is not None and (p1 != last_coord[0] or p2 != last_coord[1]):
-                    new_curve.append(M(p1 / w, p2 / h))
+                    new_curve.append(M(p1, p2))
 
-                new_curve.append(C(p1 / w, p2 / h, p3 / w, p4 / h, p3 / w, p4 / h))
+                new_curve.append(C(p1, p2, p3, p4, p3, p4))
                 last_coord = p3, p4
             elif isinstance(curve, QuadraticBezier):
                 p1, p2 = complex_to_pair(curve.start)
@@ -63,13 +63,13 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
                 p5, p6 = complex_to_pair(curve.control)
 
                 if last_coord is not None and (p1 != last_coord[0] or p2 != last_coord[1]):
-                    new_curve.append(M(p1 / w, p2 / h))
+                    new_curve.append(M(p1, p2))
 
-                new_curve.append(C(p1 / w, p2 / h, p3 / w, p4 / h, p5 / w, p6 / h))
+                new_curve.append(C(p1, p2, p5, p6, p3, p4))
                 last_coord = p3, p4
             else:
                 print(f'unkhown curve = {curve}')
-        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, color=get_color(attr['fill'])))
+        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, colors=[get_color(attr['fill'])]))
     return SvgPicture(new_paths, png_file_path)
 
 

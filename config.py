@@ -22,7 +22,7 @@ TMP_FOLDER = "tmp"
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("full_svg_dataset", "scene12.png")
+PNG_PATH = os.path.join("full_svg_dataset", "duelest.png")
 
 # count individuals in generation
 INDIVIDUAL_COUNT = 30
@@ -31,14 +31,14 @@ INDIVIDUAL_COUNT = 30
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 200
+STEP_EVOL = 50
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
 # MUTATION_TYPE = [Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
-MUTATION_TYPE = [ConcatPath(1.0), Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
+MUTATION_TYPE = [ConcatPath(0.5, 20), Needle(0.2, ConstantType(10)), DropPath(0.2, 0.0001)]
 
 # crossovers
 CROSSOVER = []
