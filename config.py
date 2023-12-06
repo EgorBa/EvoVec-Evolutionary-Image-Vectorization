@@ -18,11 +18,11 @@ class Fitness(Enum):
 # folder for tmp pictures
 TMP_FOLDER = "tmp"
 
-# debgging flg
+# debugging flg
 DEBUG = True
 
 # path to init pnf Image
-PNG_PATH = os.path.join("full_svg_dataset", "duelest.png")
+PNG_PATH = os.path.join("full_svg_dataset", "img1.png")
 
 # count individuals in generation
 INDIVIDUAL_COUNT = 30
@@ -31,14 +31,17 @@ INDIVIDUAL_COUNT = 30
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 50
+STEP_EVOL = 1
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
 # MUTATION_TYPE = [Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
-MUTATION_TYPE = [ConcatPath(0.5, 20), Needle(0.2, ConstantType(10)), DropPath(0.2, 0.0001)]
+MUTATION_TYPE = [ConcatPath(0.5, 20), Needle(0.2, ConstantType(10)), DropPath(1, 0.01)]
 
 # crossovers
 CROSSOVER = []
+
+# read init image (need to cache image)
+PNG_IMAGE = None

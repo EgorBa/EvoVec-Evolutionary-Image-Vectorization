@@ -1,3 +1,4 @@
+import time
 from typing import List
 import drawsvg as draw
 from cairosvg import svg2png
@@ -19,6 +20,7 @@ class SvgPicture:
     width: int
     height: int
     paths_count: int
+    segments_count: int
     png_init_path: str
 
     def __init__(self, list_of_paths: List[SvgPath], png_init_path: str):
@@ -27,6 +29,7 @@ class SvgPicture:
             self.png_cnt = get_contours(png_pic)
         self.paths = list_of_paths
         self.paths_count = len(self.paths)
+        self.__culc_segments_count__()
         width, height = Image.open(png_init_path).size
         self.width = width
         self.height = height
@@ -48,6 +51,7 @@ class SvgPicture:
         if len(self.paths) > 1:
             self.paths.pop(index_path)
             self.paths_count = len(self.paths)
+            self.__culc_segments_count__()
 
     def culc_fitness_function(self, clear_after=True):
         path_tmp_svg = os.path.join(config.TMP_FOLDER, f'tmp.svg')
@@ -73,3 +77,9 @@ class SvgPicture:
             os.remove(path_tmp_png)
 
         return self.fitness
+
+    def __culc_segments_count__(self):
+        count = 0
+        for p in self.paths:
+            count += len(p.path_arr)
+        self.segments_count = count

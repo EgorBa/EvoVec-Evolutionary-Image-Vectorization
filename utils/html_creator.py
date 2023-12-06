@@ -14,14 +14,23 @@ class HTMLFile:
     gen_file_indexes: List[int]
     times: List[float]
     path_pdf: str
+    start_count_paths: int
+    start_count_segments: int
+    end_count_paths: int
+    end_count_segments: int
 
     def __init__(self, path_to_graf_of_fitness: str, times: List[float], gen_file_paths: List[str],
-                 gen_file_indexes: List[int], path_pdf: str):
+                 gen_file_indexes: List[int], path_pdf: str, start_count_paths: int, start_count_segments: int,
+                 end_count_paths: int, end_count_segments: int):
         self.path_to_graf_of_fitness = path_to_graf_of_fitness
         self.gen_file_paths = gen_file_paths
         self.gen_file_indexes = gen_file_indexes
         self.path_pdf = path_pdf
         self.times = times
+        self.start_count_paths = start_count_paths
+        self.start_count_segments = start_count_segments
+        self.end_count_paths = end_count_paths
+        self.end_count_segments = end_count_segments
 
     def save_as_pdf(self):
         begin = '<!DOCTYPE html>\n<html lang=\"en\">\n\t<head>\n\t\t<meta charset=\"UTF-8\">\n\t\t<title>Vectorize algo report</title>\n\t</head>\n\t<body>\n'
@@ -32,11 +41,13 @@ class HTMLFile:
         params_crossover = self.create_used_params(config.CROSSOVER)
         avg_time = f'\t\t<p>Time of work of algorithm = {self.get_time(sum(self.times))}</p>\n'
         sum_time = f'\t\t<p>Avg time of work of 1 iteration = {self.get_time(sum(self.times) / len(self.times))}</p>\n'
+        count_of_paths = f'\t\t<p>Init paths count : {self.start_count_paths}, evolution paths count : {self.end_count_paths}</p>\n'
+        count_of_segments = f'\t\t<p>Init count of segments : {self.start_count_segments}, evolution count of segments {self.end_count_segments}</p>\n'
         table = self.create_table_with_selected_gen(self.gen_file_paths, self.gen_file_indexes)
         image = f'\t\t<figure>\n\t\t\t<img src=\"data:image/png;base64,{self.image_file_path_to_base64_string(self.path_to_graf_of_fitness)}\" alt=\"Graf of fitness\" width=\"400px\">\n\t\t\t<figcaption>Graf of fitness</figcaption>\n\t\t</figure>\n'
         end = '\t</body>\n</html>'
 
-        html_text = begin + title + count_of_individuals_in_generation + count_steps_evol + avg_time + sum_time + params_mutation + params_crossover + table + image + end
+        html_text = begin + title + count_of_individuals_in_generation + count_steps_evol + count_of_paths + count_of_segments + avg_time + sum_time + params_mutation + params_crossover + table + image + end
 
         f = open("sample.html", "w")
         f.write(html_text)

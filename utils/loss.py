@@ -2,6 +2,7 @@ from sklearn.preprocessing import normalize
 import ot
 import numpy as np
 from PIL import Image
+import config
 
 
 def opt_transport_loss(png_cnt, cur_cnt):
@@ -23,18 +24,34 @@ def opt_transport_loss(png_cnt, cur_cnt):
 
 
 def image_diff(png_first, png_second) -> float:
-    image_first = np.array(Image.open(png_first).convert('RGB'), dtype=int)
-    image_second = np.array(Image.open(png_second).convert('RGB'), dtype=int)
+    image_first, image_second = read_images(png_first, png_second)
     return float(abs(np.sum(image_second - image_first)))
 
 
 def image_diff_exp(png_first, png_second) -> float:
-    image_first = np.array(Image.open(png_first).convert('RGB'), dtype=int)
-    image_second = np.array(Image.open(png_second).convert('RGB'), dtype=int)
+    image_first, image_second = read_images(png_first, png_second)
     return float(np.sum(np.exp((abs(image_second - image_first) / 255) * 50 + 1)))
 
 
 def image_diff_mse(png_first, png_second) -> float:
-    image_first = np.array(Image.open(png_first).convert('RGB'), dtype=int)
-    image_second = np.array(Image.open(png_second).convert('RGB'), dtype=int)
+    image_first, image_second = read_images(png_first, png_second)
     return float(np.sum(np.power((abs(image_second - image_first) / 255), 2)))
+
+
+def read_images(png_first, png_second):
+    if png_first == config.PNG_PATH:
+        update_cache_if_need()
+        image_first = config.PNG_IMAGE
+    else:
+        image_first = np.array(Image.open(png_first).convert('RGB'), dtype=int)
+    if png_second == config.PNG_PATH:
+        update_cache_if_need()
+        image_second = config.PNG_IMAGE
+    else:
+        image_second = np.array(Image.open(png_second).convert('RGB'), dtype=int)
+    return image_first, image_second
+
+
+def update_cache_if_need():
+    if config.PNG_IMAGE is None:
+        config.PNG_IMAGE = np.array(Image.open(config.PNG_PATH).convert('RGB'), dtype=int)

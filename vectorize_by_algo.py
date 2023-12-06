@@ -27,9 +27,12 @@ def complex_to_pair(n):
     return round(float(data[0][1:]), 1), round(float(data[1][:-2]), 1)
 
 
-def get_color(color) -> np.array:
+def get_color(color, alpha) -> np.array:
     c = str(color).split(",")
     color_array = np.array([int(c[0][4:]), int(c[1]), int(c[2][:-1])])
+    color_array[0] = int(color_array[0] * alpha + (1 - alpha) * 255)
+    color_array[1] = int(color_array[1] * alpha + (1 - alpha) * 255)
+    color_array[2] = int(color_array[2] * alpha + (1 - alpha) * 255)
     return color_array
 
 
@@ -38,8 +41,9 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
     paths, attributes = svg2paths(svg_file_location=svg_path)
     new_paths = []
     for path, attr in zip(paths, attributes):
-        if float(attr['opacity']) < 0.7:
-            continue
+        alpha = float(attr['opacity'])
+        # if alpha < 0.7:
+        #     continue
         new_curve = []
         is_first = True
         last_coord = None
@@ -69,7 +73,7 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
                 last_coord = p3, p4
             else:
                 print(f'unkhown curve = {curve}')
-        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, colors=[get_color(attr['fill'])]))
+        new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, colors=[get_color(attr['fill'], alpha)]))
     return SvgPicture(new_paths, png_file_path)
 
 
@@ -77,7 +81,7 @@ def get_initial_svg(png_file_path) -> SvgPicture:
     start_time = time.time()
     svg_path = os.path.join(THISDIR, f"tmp.svg")
     png_path = os.path.join(THISDIR, png_file_path)
-    Path(svg_path).write_text(trace(png_path), encoding="utf-8")
+    Path(svg_path).write_text(trace(png_path, mode='detailed'), encoding="utf-8")
     w, h = Image.open(png_path).size
     svg_pic = preprocess_svg_paths(svg_path, png_path, w, h)
     os.remove(svg_path)

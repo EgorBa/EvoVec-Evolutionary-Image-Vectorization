@@ -8,6 +8,7 @@ import threading
 import config
 from dto.svg_path import SvgPath
 from dto.svg_picture import SvgPicture
+from utils.color import fix_init_colors
 from utils.html_creator import HTMLFile
 from utils.stat_creator import create_gif, create_graf, get_gen_file_paths_by_numbers
 from vectorize_by_algo import get_initial_svg
@@ -21,6 +22,7 @@ def clear_tmp_dir():
 def init_first_generation() -> List[SvgPicture]:
     generation = []
     individual = get_initial_svg(config.PNG_PATH)
+    # fix_init_colors(individual)
     for i in range(config.INDIVIDUAL_COUNT):
         generation.append(individual.__copy__())
     if config.DEBUG:
@@ -84,6 +86,10 @@ def main():
     best_fitness_value = []
     times = []
     start_time = 0
+    start_count_paths = generation[0].paths_count
+    start_count_segments = generation[0].segments_count
+    end_count_paths = generation[0].paths_count
+    end_count_segments = generation[0].segments_count
 
     for i in range(config.STEP_EVOL):
         if config.DEBUG:
@@ -105,6 +111,8 @@ def main():
                   f'time for gen = {t} sec.')
             print("===============================")
             times.append(t)
+            end_count_paths = best.paths_count
+            end_count_segments = best.segments_count
 
     if config.DEBUG:
         create_gif(os.path.join(config.TMP_FOLDER, f'gif_animation.gif'))
@@ -112,8 +120,17 @@ def main():
         create_graf(best_fitness_value, path_to_graf)
         gen_numbers = [0, int(config.STEP_EVOL / 4), int(config.STEP_EVOL / 2), int(3 * config.STEP_EVOL / 4),
                        config.STEP_EVOL - 1]
-        HTMLFile(path_to_graf, times, get_gen_file_paths_by_numbers(gen_numbers), gen_numbers,
-                 os.path.join(config.TMP_FOLDER, 'results.pdf')).save_as_pdf()
+        HTMLFile(
+            path_to_graf_of_fitness=path_to_graf,
+            times=times,
+            gen_file_paths=get_gen_file_paths_by_numbers(gen_numbers),
+            gen_file_indexes=gen_numbers,
+            path_pdf=os.path.join(config.TMP_FOLDER, 'results.pdf'),
+            start_count_paths=start_count_paths,
+            start_count_segments=start_count_segments,
+            end_count_paths=end_count_paths,
+            end_count_segments=end_count_segments
+        ).save_as_pdf()
 
 
 if __name__ == "__main__":
