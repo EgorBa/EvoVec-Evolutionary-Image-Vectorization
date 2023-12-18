@@ -8,7 +8,7 @@ from tqdm import tqdm
 item = get_initial_svg(config.PNG_PATH)
 times = []
 path_count = []
-for i in tqdm(range(min(item.paths_count - 1, 100))):
+for i in tqdm(range(min(item.paths_count - 1, 1000))):
     start_time = time.time()
     item.culc_fitness_function()
     times.append(time.time() - start_time)

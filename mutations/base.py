@@ -17,12 +17,13 @@ class Mutation:
     def mutate(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
         if len(picture.paths) == 0:
             if config.DEBUG:
-                print("No paths for needle mutation")
+                print("No paths for mutation")
             return picture
 
         if random.random() < self.probability:
-            self.__mutate__(picture, gen_number)
+            if self.__mutate__(picture, gen_number):
+                picture.fitness = -1
         return picture
 
-    def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
-        return picture
+    def __mutate__(self, picture: SvgPicture, gen_number: int) -> bool:
+        return False

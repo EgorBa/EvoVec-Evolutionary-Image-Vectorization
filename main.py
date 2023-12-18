@@ -22,6 +22,7 @@ def clear_tmp_dir():
 def init_first_generation() -> List[SvgPicture]:
     generation = []
     individual = get_initial_svg(config.PNG_PATH)
+    individual.culc_fitness_function()
     # fix_init_colors(individual)
     for i in range(config.INDIVIDUAL_COUNT):
         generation.append(individual.__copy__())
@@ -40,19 +41,8 @@ def get_most_fittest(cur_population: List[SvgPicture], count: int) -> List[SvgPi
 def create_children(cur_population: List[SvgPicture]) -> List[SvgPicture]:
     children = []
     for i in range(config.INDIVIDUAL_COUNT):
-        first_parent = cur_population[random.randint(0, len(cur_population) - 1)]
-        second_parent = cur_population[random.randint(0, len(cur_population) - 1)]
-        paths = []
-        for path in first_parent.paths:
-            path_arr = []
-            colors = []
-            for segment in path.path_arr:
-                path_arr.append(segment.__copy__())
-            for color in path.colors:
-                colors.append(np.array(color))
-            paths.append(SvgPath(path.width, path.height, path_arr, colors))
-        child = SvgPicture(paths, config.PNG_PATH)
-        children.append(child)
+        parent = cur_population[random.randint(0, len(cur_population) - 1)]
+        children.append(parent.__copy__())
     if config.DEBUG:
         print(f'children created, size = {len(children)}')
     return children

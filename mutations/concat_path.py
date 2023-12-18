@@ -15,7 +15,7 @@ class ConcatPath(Mutation):
     def __str__(self):
         return f'{__class__.__name__} (probability = {self.probability}, diff_color = {self.diff_color})'
 
-    def __mutate__(self, picture: SvgPicture, gen_number: int) -> SvgPicture:
+    def __mutate__(self, picture: SvgPicture, gen_number: int) -> bool:
         random_path_index1 = random.randint(0, len(picture.paths) - 1)
         random_path_index2 = random.randint(0, len(picture.paths) - 1)
         path1 = picture.paths[random_path_index1]
@@ -28,4 +28,5 @@ class ConcatPath(Mutation):
             path1.set_path_arr(new_path)
             path1.add_color(path2.colors)
             picture.del_path(random_path_index2)
-        return picture
+            return True
+        return False

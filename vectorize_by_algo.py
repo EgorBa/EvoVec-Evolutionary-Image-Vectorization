@@ -81,7 +81,7 @@ def get_initial_svg(png_file_path) -> SvgPicture:
     start_time = time.time()
     svg_path = os.path.join(THISDIR, f"tmp.svg")
     png_path = os.path.join(THISDIR, png_file_path)
-    Path(svg_path).write_text(trace(png_path, mode='detailed'), encoding="utf-8")
+    Path(svg_path).write_text(trace(png_path), encoding="utf-8")
     w, h = Image.open(png_path).size
     svg_pic = preprocess_svg_paths(svg_path, png_path, w, h)
     os.remove(svg_path)
