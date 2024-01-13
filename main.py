@@ -23,7 +23,7 @@ def init_first_generation() -> List[SvgPicture]:
     generation = []
     individual = get_initial_svg(config.PNG_PATH)
     individual.culc_fitness_function()
-    # fix_init_colors(individual)
+    fix_init_colors(individual)
     for i in range(config.INDIVIDUAL_COUNT):
         generation.append(individual.__copy__())
     if config.DEBUG:

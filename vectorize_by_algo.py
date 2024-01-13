@@ -42,8 +42,8 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
     new_paths = []
     for path, attr in zip(paths, attributes):
         alpha = float(attr['opacity'])
-        # if alpha < 0.7:
-        #     continue
+        if alpha < 0.7:
+            continue
         new_curve = []
         is_first = True
         last_coord = None
