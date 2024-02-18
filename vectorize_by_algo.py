@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from svgtrace import trace
 import os
-from svgpathtools import svg2paths, Line, QuadraticBezier
+from svgpathtools import svg2paths, Line, QuadraticBezier, CubicBezier
 from PIL import Image
 import time
 
@@ -36,7 +36,7 @@ def get_color(color, alpha) -> np.array:
     return color_array
 
 
-def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPicture:
+def preprocess_svg_paths(svg_path, png_file_path: str) -> SvgPicture:
     width, height = Image.open(png_file_path).size
     paths, attributes = svg2paths(svg_file_location=svg_path)
     new_paths = []
@@ -71,6 +71,17 @@ def preprocess_svg_paths(svg_path, png_file_path: str, w: int, h: int) -> SvgPic
 
                 new_curve.append(C(p1, p2, p5, p6, p3, p4))
                 last_coord = p3, p4
+            elif isinstance(curve, CubicBezier):
+                p1, p2 = complex_to_pair(curve.start)
+                p3, p4 = complex_to_pair(curve.end)
+                p5, p6 = complex_to_pair(curve.control1)
+                p7, p8 = complex_to_pair(curve.control2)
+
+                if last_coord is not None and (p1 != last_coord[0] or p2 != last_coord[1]):
+                    new_curve.append(M(p1, p2))
+
+                new_curve.append(C(p5, p6, p7, p8, p3, p4))
+                last_coord = p3, p4
             else:
                 print(f'unkhown curve = {curve}')
         new_paths.append(SvgPath(path_arr=new_curve, width=width, height=height, colors=[get_color(attr['fill'], alpha)]))
@@ -82,13 +93,15 @@ def get_initial_svg(png_file_path) -> SvgPicture:
     svg_path = os.path.join(THISDIR, f"tmp.svg")
     png_path = os.path.join(THISDIR, png_file_path)
     Path(svg_path).write_text(trace(png_path), encoding="utf-8")
-    w, h = Image.open(png_path).size
-    svg_pic = preprocess_svg_paths(svg_path, png_path, w, h)
+    svg_pic = preprocess_svg_paths(svg_path, png_path)
     os.remove(svg_path)
     if config.DEBUG:
         print('Algo vectorization time =', round(abs(time.time() - start_time), 3), 'sec', ', paths count =',
               len(svg_pic.paths))
     return svg_pic
 
+
 # For test
-# get_initial_svg(os.path.join("data", "img_3.png")).save_as_svg("lolkek.svg")
+# init_path = os.path.join("data", "test images")
+# for image in os.listdir(init_path):
+#     get_initial_svg(os.path.join(init_path, image)).save_as_svg(f'{image}.svg')

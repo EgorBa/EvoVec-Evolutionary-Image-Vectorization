@@ -31,14 +31,13 @@ INDIVIDUAL_COUNT = 30
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 100
+STEP_EVOL = 600
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
-# MUTATION_TYPE = [Needle(0.2, ConstantType(0.001)), DropPath(0.2, 0.0001)]
-MUTATION_TYPE = [ConcatPath(0.5, 20), Needle(0.2, ConstantType(10)), DropPath(1, 0.001)]
+MUTATION_TYPE = [ConcatPath(0.2, 50), DropPath(1, 0.005)]
 
 # crossovers
 CROSSOVER = []
@@ -47,4 +46,4 @@ CROSSOVER = []
 PNG_IMAGE = None
 
 # color diff
-COLOR_DIFF = 500
+COLOR_DIFF = 400
