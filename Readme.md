@@ -8,6 +8,9 @@ Primary contact: [Egor Bazhenov](tujh.bazhenov.kbn00@mail.ru)
 |------------------|-------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------------------------|
 | Vectorized image | ![](data/test%20images/readme%20examples/my_algo_hippo.png) | ![](data/test%20images/readme%20examples/my_algo_land.png) | ![](data/test%20images/readme%20examples/my_algo_list.png) | ![](data/test%20images/readme%20examples/my_algo_monkey.png) | ![](data/test%20images/readme%20examples/my_algo_smile.png) |
 
+We present a new method for vectorizing images using a variable number of paths based on an evolutionary algorithm.
+The result of the deterministic algorithm is selected as the initial population. Further, various mutations and crossovers are iteratively applied to obtain a better vectorized image.
+
 ## Usage
 
 1. ``git clone https://github.com/EgorBa/victorize_algo``
