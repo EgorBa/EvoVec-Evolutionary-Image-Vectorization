@@ -27,11 +27,11 @@ def create_resized_image(png_path: str, max_w: int, max_h: int) -> str:
 
 
 def resize_svg_file_data_to_init(png_path: str, svg_file_data: str) -> str:
-    if png_path != config.RESIZED_PNG_PATH:
+    if not png_path.__contains__(config.RESIZED_PNG_PATH):
         return svg_file_data
 
     update_cache_if_need()
-    (w, h) = config.PNG_IMAGE.size
+    (w, h) = (len(config.PNG_IMAGE), len(config.PNG_IMAGE[0]))
 
     svg_file_data = svg_file_data.replace(f'width=\"{config.MAX_W}\"', f'width=\"{w}\"')
     svg_file_data = svg_file_data.replace(f'height=\"{config.MAX_H}\"', f'height=\"{h}\"')
@@ -39,11 +39,11 @@ def resize_svg_file_data_to_init(png_path: str, svg_file_data: str) -> str:
 
 
 def resize_svg_file_data_from_init(png_path: str, svg_file_data: str) -> str:
-    if png_path != config.RESIZED_PNG_PATH:
+    if not png_path.__contains__(config.RESIZED_PNG_PATH):
         return svg_file_data
 
     update_cache_if_need()
-    (w, h) = config.PNG_IMAGE.size
+    (w, h) = (len(config.PNG_IMAGE), len(config.PNG_IMAGE[0]))
 
     svg_file_data = svg_file_data.replace(f'width=\"{w}\"', f'width=\"{config.MAX_W}\"')
     svg_file_data = svg_file_data.replace(f'height=\"{h}\"', f'height=\"{config.MAX_H}\"')

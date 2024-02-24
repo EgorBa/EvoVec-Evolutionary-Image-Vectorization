@@ -67,15 +67,15 @@ class SvgPicture:
             svg2png(svg_str, write_to=str(path_tmp_png))
 
         if config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF:
-            self.fitness = image_diff(self.png_init_path, path_tmp_png)
+            self.fitness = image_diff(config.PNG_PATH, path_tmp_png)
         elif config.FITNESS_TYPE == config.Fitness.OPT_TRANSPORT:
             cur_pic = read_picture(path_tmp_png)
             cur_cnt = get_contours(cur_pic)
             self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
         elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_EXP:
-            self.fitness = image_diff_exp(self.png_init_path, path_tmp_png)
+            self.fitness = image_diff_exp(config.PNG_PATH, path_tmp_png)
         elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_MSE:
-            self.fitness = image_diff_mse(self.png_init_path, path_tmp_png)
+            self.fitness = image_diff_mse(config.PNG_PATH, path_tmp_png)
 
         if clear_after:
             os.remove(path_tmp_svg)
