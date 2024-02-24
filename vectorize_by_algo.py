@@ -36,7 +36,7 @@ def get_color(color, alpha) -> np.array:
     return color_array
 
 
-def preprocess_svg_paths(svg_path, png_file_path: str) -> SvgPicture:
+def preprocess_svg_paths(svg_path: str, png_file_path: str) -> SvgPicture:
     width, height = Image.open(png_file_path).size
     paths, attributes = svg2paths(svg_file_location=svg_path)
     new_paths = []

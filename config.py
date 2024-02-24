@@ -31,13 +31,13 @@ INDIVIDUAL_COUNT = 30
 ELITE_PERCENT = 0.2
 
 # step of evol
-STEP_EVOL = 600
+STEP_EVOL = 500
 
 # fitness type
 FITNESS_TYPE = Fitness.IMAGE_DIFF_MSE
 
 # mutations
-MUTATION_TYPE = [ConcatPath(0.2, 50), DropPath(1, 0.005)]
+MUTATION_TYPE = [ConcatPath(0.2, 50), DropPath(1, 0.0001)]
 
 # crossovers
 CROSSOVER = []
@@ -47,3 +47,10 @@ PNG_IMAGE = None
 
 # color diff
 COLOR_DIFF = 400
+
+# max width and height of input image
+MAX_W = 512
+MAX_H = 512
+
+# path for resized image
+RESIZED_PNG_PATH = os.path.join(TMP_FOLDER, f'resized_png.png')

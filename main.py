@@ -1,15 +1,14 @@
 import os
 from typing import List
 import random
-import numpy as np
 import time
 import threading
 
 import config
-from dto.svg_path import SvgPath
 from dto.svg_picture import SvgPicture
 from utils.color import fix_init_colors
 from utils.html_creator import HTMLFile
+from utils.resizer import create_resized_image
 from utils.stat_creator import create_gif, create_graf, get_gen_file_paths_by_numbers
 from vectorize_by_algo import get_initial_svg
 
@@ -21,7 +20,8 @@ def clear_tmp_dir():
 
 def init_first_generation() -> List[SvgPicture]:
     generation = []
-    individual = get_initial_svg(config.PNG_PATH)
+    tmp_path = create_resized_image(config.PNG_PATH, max_w=config.MAX_W, max_h=config.MAX_H)
+    individual = get_initial_svg(tmp_path)
     individual.culc_fitness_function()
     fix_init_colors(individual)
     for i in range(config.INDIVIDUAL_COUNT):
@@ -70,9 +70,10 @@ def mutation(cur_population: List[SvgPicture], gen_number: int) -> List[SvgPictu
 
 
 def main():
+    clear_tmp_dir()
+
     generation = init_first_generation()
 
-    clear_tmp_dir()
     best_fitness_value = []
     times = []
     start_time = 0

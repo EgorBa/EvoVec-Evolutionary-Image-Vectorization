@@ -1,15 +1,17 @@
-from typing import List
-import drawsvg as draw
-from cairosvg import svg2png
-import typing
-import cv2
 import os
+import typing
+from typing import List
+
+import cv2
+import drawsvg as draw
+from PIL import Image
+from cairosvg import svg2png
 
 import config
 from dto.svg_path import SvgPath
 from utils.image import read_picture, get_contours
 from utils.loss import opt_transport_loss, image_diff, image_diff_exp, image_diff_mse
-from PIL import Image
+from utils.resizer import resize_svg_file_data_to_init
 
 
 class SvgPicture:
@@ -61,6 +63,7 @@ class SvgPicture:
         self.save_as_svg(path_tmp_svg)
         with open(path_tmp_svg, 'r') as f:
             svg_str = f.read()
+            svg_str = resize_svg_file_data_to_init(self.png_init_path, svg_str)
             svg2png(svg_str, write_to=str(path_tmp_png))
 
         if config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF:
