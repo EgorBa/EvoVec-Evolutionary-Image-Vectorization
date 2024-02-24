@@ -9,8 +9,9 @@ from cairosvg import svg2png
 
 import config
 from dto.svg_path import SvgPath
+from fitness.loss_type import Fitness
 from utils.image import read_picture, get_contours
-from utils.loss import opt_transport_loss, image_diff, image_diff_exp, image_diff_mse
+from fitness.loss import opt_transport_loss, image_diff, image_diff_exp, image_diff_mse
 from utils.resizer import resize_svg_file_data_to_init
 
 
@@ -25,7 +26,7 @@ class SvgPicture:
     png_init_path: str
 
     def __init__(self, list_of_paths: List[SvgPath], png_init_path: str, fitness: float = -1):
-        if config.FITNESS_TYPE == config.Fitness.OPT_TRANSPORT:
+        if config.FITNESS_TYPE == Fitness.OPT_TRANSPORT:
             png_pic = read_picture(png_init_path)
             self.png_cnt = get_contours(png_pic)
         self.paths = list_of_paths
@@ -66,15 +67,15 @@ class SvgPicture:
             svg_str = resize_svg_file_data_to_init(self.png_init_path, svg_str)
             svg2png(svg_str, write_to=str(path_tmp_png))
 
-        if config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF:
+        if config.FITNESS_TYPE == Fitness.IMAGE_DIFF:
             self.fitness = image_diff(config.PNG_PATH, path_tmp_png)
-        elif config.FITNESS_TYPE == config.Fitness.OPT_TRANSPORT:
+        elif config.FITNESS_TYPE == Fitness.OPT_TRANSPORT:
             cur_pic = read_picture(path_tmp_png)
             cur_cnt = get_contours(cur_pic)
             self.fitness = opt_transport_loss(self.png_cnt, cur_cnt)
-        elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_EXP:
+        elif config.FITNESS_TYPE == Fitness.IMAGE_DIFF_EXP:
             self.fitness = image_diff_exp(config.PNG_PATH, path_tmp_png)
-        elif config.FITNESS_TYPE == config.Fitness.IMAGE_DIFF_MSE:
+        elif config.FITNESS_TYPE == Fitness.IMAGE_DIFF_MSE:
             self.fitness = image_diff_mse(config.PNG_PATH, path_tmp_png)
 
         if clear_after:

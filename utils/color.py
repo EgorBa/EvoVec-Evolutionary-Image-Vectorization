@@ -8,7 +8,7 @@ from dto.svg_picture import SvgPicture
 from tqdm import tqdm
 
 from utils.image import get_area
-from utils.loss import read_images
+from fitness.loss import read_images
 
 
 def fix_init_colors(picture: SvgPicture):
