@@ -1,4 +1,4 @@
-# Image vectorization using a variable curve number
+# EvoVec: Evolutionary Image Vectorization with Adaptive Curve Number and Color Gradients
 
 Primary contact: [Egor Bazhenov](tujh.bazhenov.kbn00@mail.ru)
 
@@ -13,7 +13,7 @@ The result of the deterministic algorithm is selected as the initial population.
 
 ## Usage
 
-1. ``git clone https://github.com/EgorBa/victorize_algo``
+1. ``git clone https://github.com/EgorBa/EvoVec-Evolutionary-Image-Vectorization``
 2. ``pip install requirements.txt``
 3. Configure [config file](config.py) for your task
 
