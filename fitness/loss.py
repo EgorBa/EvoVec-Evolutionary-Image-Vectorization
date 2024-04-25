@@ -2,6 +2,8 @@ from sklearn.preprocessing import normalize
 import ot
 import numpy as np
 from PIL import Image
+
+import cache
 import config
 
 
@@ -41,17 +43,17 @@ def image_diff_mse(png_first, png_second) -> float:
 def read_images(png_first, png_second):
     if png_first == config.PNG_PATH:
         update_cache_if_need()
-        image_first = config.PNG_IMAGE
+        image_first = cache.PNG_IMAGE
     else:
         image_first = np.array(Image.open(png_first).convert('RGB'), dtype=int)
     if png_second == config.PNG_PATH:
         update_cache_if_need()
-        image_second = config.PNG_IMAGE
+        image_second = cache.PNG_IMAGE
     else:
         image_second = np.array(Image.open(png_second).convert('RGB'), dtype=int)
     return image_first, image_second
 
 
 def update_cache_if_need():
-    if config.PNG_IMAGE is None:
-        config.PNG_IMAGE = np.array(Image.open(config.PNG_PATH).convert('RGB'), dtype=int)
+    if cache.PNG_IMAGE is None:
+        cache.PNG_IMAGE = np.array(Image.open(config.PNG_PATH).convert('RGB'), dtype=int)
