@@ -39,7 +39,7 @@ MUTATION_TYPE = [
 CROSSOVER = []
 
 # color diff
-COLOR_DIFF = 200
+COLOR_DIFF = 201
 
 # max width and height of input image
 MAX_W = 512
